@@ -24,14 +24,14 @@ The system should:
 
 Inside this repository, you will find:
 
-1.  **`module_materials/`**: A folder containing 8 PDF files, representing Chapters 1 through 8 of the "Estate Planning" module. This is the source material your RAG system should 
+1.  **`data/`**: A folder containing 8 PDF files, representing Chapters 1 through 8 of the "Estate Planning" module. This is the source material your RAG system should 
 use.
-2.  **`quiz_data.json`**: A JSON file containing all the multiple-choice questions for the 8 chapters (10 questions per chapter). Each entry includes:
+2.  **`data/processed/5_estate_planning_questions.json`**: A JSON file containing all the multiple-choice questions for the 8 chapters (10 questions per chapter). Each entry includes:
     *   `chapter_key`: Identifier for the chapter (e.g., "chapter1").
     *   `question`: The full text of the multiple-choice question, including the options (A, B, C, D).
     *   `expected_answer`: The correct option (e.g., "A", "B", "C", or "D").
 
-*(Optional: You may want to include the actual quiz PDFs in a `quizzes/` folder as well for context, even if the primary evaluation uses the JSON).*
+*(Optional: You may want to include the actual quiz PDFs in a `data/5_estate_planning` folder as well for context, even if the primary evaluation uses the JSON).*
 
 ## Goals & Success Criteria
 
@@ -74,6 +74,8 @@ choose A, B, C, or D based *only* on the retrieved context? Be wary of hallucina
 
 You are free to choose the programming languages, frameworks, and libraries you are most comfortable with (e.g., Python, Langchain, LlamaIndex, Node.js, etc.). You can use any LLM 
 accessible via API (like OpenAI's models, Anthropic's Claude, etc.) or run local models if you prefer.
+
+(Feel free to request an API key from gemini, anthropic etc. if you'd like)
 
 ## Next Steps & Communication
 
