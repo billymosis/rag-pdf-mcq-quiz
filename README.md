@@ -24,7 +24,7 @@ The system should:
 
 Inside this repository, you will find:
 
-1.  **`data/`**: A folder containing 8 PDF files, representing Chapters 1 through 8 of the "Estate Planning" module. This is the source material your RAG system should 
+1.  **`data/5_estate_planning/Lessons`**: A folder containing 8 PDF files, representing Chapters 1 through 8 of the "Estate Planning" module. This is the source material your RAG system should 
 use.
 2.  **`data/processed/5_estate_planning_questions.json`**: A JSON file containing all the multiple-choice questions for the 8 chapters (10 questions per chapter). Each entry includes:
     *   `chapter_key`: Identifier for the chapter (e.g., "chapter1").
