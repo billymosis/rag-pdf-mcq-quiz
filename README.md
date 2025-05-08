@@ -6,7 +6,7 @@ Welcome to Stage 2 of the interview process with DocuAsk!
 
 This repository contains the materials and instructions for a take-home technical assessment. The goal is to evaluate your approach to problem-solving in a generative AI context, 
 specifically using **Retrieval Augmented Generation (RAG)**. We're interested in how you think about retrieving information and solving problems in this domain, rather than UI 
-development (we assume strong frontend/UI skills based on prior stages/portfolio).
+development.
 
 This task is based on a real-world requirement from the MFPC (Malaysian Financial Planning Council) involving their educational materials.
 
@@ -36,7 +36,7 @@ use.
 ## Goals & Success Criteria
 
 *   **Primary Goal:** Achieve the highest possible accuracy in answering the 80 quiz questions using your RAG system.
-*   **Minimum Accuracy:** Your system must achieve at least **70%** accuracy across all questions.
+*   **Minimum Accuracy:** Your system must achieve at least **85%** accuracy across all questions.
 *   **(Benchmark):** For reference, an internal implementation achieved 97% accuracy. Aim high!
 
 ## Deliverables
