@@ -36,7 +36,8 @@ use.
 ## Goals & Success Criteria
 
 *   **Primary Goal:** Achieve the highest possible accuracy in answering the 80 quiz questions using your RAG system.
-*   **Minimum Accuracy:** Your system must achieve at least **85%** accuracy across all questions.
+*   **Minimum Accuracy:** Your system must achieve at least **75%** accuracy across all questions.
+*   **Excellent Accuracy:** Your system is *awesome* if it achieves **85%** accuracy across all questions.
 *   **(Benchmark):** For reference, an internal implementation achieved 97% accuracy. Aim high!
 
 ## Deliverables
@@ -75,19 +76,15 @@ choose A, B, C, or D based *only* on the retrieved context? Be wary of hallucina
 You are free to choose the programming languages, frameworks, and libraries you are most comfortable with (e.g., Python, Langchain, LlamaIndex, Node.js, etc.). You can use any LLM 
 accessible via API (like OpenAI's models, Anthropic's Claude, etc.) or run local models if you prefer.
 
-(Feel free to request an API key from gemini, anthropic etc. if you'd like)
+(Feel free to request an API key from gemini if you'd like)
 
 ## Next Steps & Communication
 
 1.  Clone or fork this repository.
 2.  Review the materials and the task description.
 3.  Begin designing and implementing your solution.
-4.  **Reach out anytime:** If you have questions or need clarification, please don't hesitate to message Joseph Chin (contact details provided separately, e.g., via email or the 
-communication channel used for scheduling). Collaboration and asking questions are encouraged.
-5.  **Submission & Review:** Please aim to have your solution ready for discussion by the agreed-upon deadline (typically early the following week, e.g., Monday/Tuesday, unless 
-otherwise specified). Let Joseph know your availability. We will schedule a call to walk through your code, design choices, and results.
-
-**Reference Recording:** The discussion where this task was introduced may be available for your reference (link provided separately if applicable).
+4.  **Reach out anytime:** If you have questions or need clarification, please don't hesitate to message Joseph Chin (contact details provided separately, e.g., via email, whatsapp or through the agency). Collaboration and asking questions are encouraged.
+5.  **Submission & Review:** Please aim to have your solution ready for discussion by the agreed-upon deadline (typically the assessment should take no more than a few days). Let Joseph know your availability. We will schedule a call to walk through your code, design choices, and results.
 
 ---
 
