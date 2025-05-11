@@ -86,6 +86,31 @@ accessible via API (like OpenAI's models, Anthropic's Claude, etc.) or run local
 4.  **Reach out anytime:** If you have questions or need clarification, please don't hesitate to message Joseph Chin (contact details provided separately, e.g., via email, whatsapp or through the agency). Collaboration and asking questions are encouraged.
 5.  **Submission & Review:** Please aim to have your solution ready for discussion by the agreed-upon deadline (typically the assessment should take no more than a few days). Let Joseph know your availability. We will schedule a call to walk through your code, design choices, and results.
 
+## Frequently Asked Questions (FAQ)
+
+### Test Policies and Evaluation
+
+#### 1. What is the policy about using AI in this test?
+AI usage is encouraged. This is an "open book" assessment where you can use common tools that would be used on the job, including Google, StackOverflow, and AI assistants.
+
+#### 2. Will the evaluation be done solely on the 80 questions provided, or will there be additional test questions?
+The evaluation will be done solely on the questions provided. There are no hidden tests or trick questions.
+
+#### 3. Is the 75% accuracy threshold calculated across all questions equally, or are some chapters weighted differently?
+All questions are weighted equally with no weighting differences between chapters.
+
+#### 4. Are there any specific requirements for the API implementation, such as response time constraints or throughput volume target?
+The assessment is more interested in the process of improvement and your thought process rather than specific performance metrics.
+
+#### 5. Should I consider common security issues like DoS possibilities or other attacks?
+No need to consider these generally speaking. The focus is on the RAG system's accuracy and your approach.
+
+### General Information
+
+This is an "open book" assessment with no hidden tests or trick questions. The goal is to see how you work, how you think, and to provide normal work conditions.
+
+The assessment does not prohibit the use of Google, StackOverflow, AI, or other common tools that are used on the job.
+
 ---
 
 Good luck! We're looking forward to seeing your approach.
