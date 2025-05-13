@@ -125,6 +125,48 @@
       "answer": "D"
     }
   ],
+  "chapter_4": [
+    {
+      "question": "1. With reference to Trustees, which of the following statement(s) is/are correct? \n\nI. The powers of the trustee are governed by an Act of Parliament. \n\nII. The court cannot step in should a trustee fail in carrying out his duty. \n\nIII. A maximum of five trustees can be appointed for family trusts. \n\nIV. In the absence of trustees the benefit of a trust is still effective. \n\nA. I and II only \n\nB. II and III only \n\nC. II and IV only \n\nD. I and IV only",
+      "answer": "D"
+    },
+    {
+      "question": "2. Which of these statements is not correct with reference to the uses of trusts in estate planning? \n\nA. The trustee has a fiduciary duty to act in the interest of the beneficiaries. \n\nB. A trust creates an equitable obligation that is strictly imposed by the court of law \n\nC. Trust properties are those assets that have been transferred to the trustee to be held for the benefit of beneficiaries. \nD. The Trustee Act 1949 defines the duties of the trustee and it overrides the trust deed.",
+      "answer": "D"
+    },
+    {
+      "question": "3. Which of the statements below are correct with reference to the components of trusts? \n\nI. A life insurance policy assigned to a trustee for the beneficiaries is part of the 'Trust Corpus' or assets of the trust. \nII. The trust deed can provide instructions to the trustees to manage and distribute life insurance proceeds irrespective whether the life policy was created through statutory or non-statutory means. \nIII. Beneficiaries have legally enforceable rights that enable them to defend and protect their interest in the trust. \n\nA. All are correct except (I) \n\nB. All are correct except (II) \n\nC. All are correct except (III) \n\nD. All are correct",
+      "answer": "D"
+    },
+    {
+      "question": "4. With reference to the classification of trusts, which of the following is/are correct? \n\nI. The naming of nominees who are spouse, children or parents (where there is no spouse or child) in a life policy creates a Statutory Trust. \nII. Should a settlor set up a trust without naming or identifying the beneficiary, a Resulting Trust is formed where the beneficial interest reverts back to the settlor. \nIII. Where the settlor has specified exact interest or share proportions for beneficiaries in the trust, a Fixed Trust has been set up. \nIV. In a Discretionary Trust, the trustee has the discretion to decide on how much of the trust property is to be distributed for each beneficiary. \n\nA. All of the above \n\nB. I and II only \n\nC. II and III only \n\nD. III and IV only",
+      "answer": "A"
+    },
+    {
+      "question": "5. With reference to Testamentary Trusts, which of these statements is not correct? \n\nI. This is trust created by means of the will following the testator's death. \n\nII. The trust can only come into effect after probate has been obtained. \n\nIII. Secrecy of assets and contents of a testamentary trust can be kept confidential after the death of a testator. \nIV. A testamentary trust will become irrevocable upon the death of the testator. \n\nA. I only \n\nB. II only \n\nC. III only \n\nD. IV only",
+      "answer": "C"
+    },
+    {
+      "question": "6. When a trust is created, who has legal title and equitable ownership? \n\nA. Beneficiary (legal title) and Trustee (equitable ownership). \n\nB. Beneficiary (legal title) and Settlor (equitable ownership). \n\nC. Trustee (legal title) and Beneficiary (equitable ownership). \n\nD. Trustee (legal title) and Settlor (equitable ownership).",
+      "answer": "C"
+    },
+    {
+      "question": "7. Chan transfers property to Lim and directs that the income derived shall be paid to Angela. Which of the following is the right option \n\nA. Chan (Beneficiary), Lim (Trustee), Angela (Settlor) \nB. Chan (Settlor), Lim (Beneficiary), Angela (Trustee) \nC. Chan (Trustee), Lim (Settlor), Angela (Beneficiary) \nD. Chan (Settlor), Lim (Trustee), Angela (Beneficiary)",
+      "answer": "D"
+    },
+    {
+      "question": "8. Which of the following is not true with reference to the general principles of trusts? \n\nA. A settlor transfers legal ownership to trustees \n\nB. Trusts may be created by a Will \n\nC. Beneficiaries may not be trustees \n\nD. Trustees must consult the settlor in all dealings concerning the trust",
+      "answer": "D"
+    },
+    {
+      "question": "9. What is a testamentary trust? \n\nA. It is a trust created under a Will and is revocable before the Testator's death. \n\nB. It is a trust created under a Power of Attorney and is never irrevocable until the Donor's death. \nC. It is a trust created by operation of law. \n\nD. It is a trust created by court",
+      "answer": "A"
+    },
+    {
+      "question": "10. In his Will, Mr Tan leaves \"the majority of my shares in Genting Resorts Bhd to Mr Chin for the benefit of my children\". What is the consequence of this instruction? \n\n1. The trust will fail for lack of certainty of objects (beneficiaries) \n\n2. The trust will fail for lack of certainty of subject matter \n\n3. The trust will fail for lack of certainty of words \n\n4. The shares will be part of a Resulting Trust in favour of the children only \n\n5. The shares will become part of the residue \n\nA. 1 and 4 only \n\nB. 2 and 5 only \n\nC. 3 and 5 only \n\nD. 1,2 and 4 only",
+      "answer": "B"
+    }
+  ],
   "chapter_5": [
     {
       "question": "1. With reference to a Power of Attorney, which of the following statement(s) is/are \ncorrect? \n\nI. The Durable Power of Attorney authorises a trusted person to make financial decisions for \nan individual should the person become unable to do so himself. \n\nII. The person appointed in the Durable Power of Attorney is called the Attorney or Donee \n\nIII. The death or mental incapacity of the Donor revokes a simple Power of Attorney. \n\nIV. The death or legal incapacity or bankruptcy of the Donee revokes a Power of attorney. \n\nA. I and II only \n\nB. II and III only \n\nC. I and III only \n\nD. All of the above",

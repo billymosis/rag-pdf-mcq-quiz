@@ -76,7 +76,7 @@ choose A, B, C, or D based *only* on the retrieved context? Be wary of hallucina
 You are free to choose the programming languages, frameworks, and libraries you are most comfortable with (e.g., Python, Langchain, LlamaIndex, Node.js, etc.). You can use any LLM 
 accessible via API (like OpenAI's models, Anthropic's Claude, etc.) or run local models if you prefer.
 
-(Feel free to request an API key from gemini if you'd like)
+**(Feel free to request an API key from gemini if you'd like)**
 
 ## Next Steps & Communication
 
@@ -105,11 +105,18 @@ The assessment is more interested in the process of improvement and your thought
 #### 5. Should I consider common security issues like DoS possibilities or other attacks?
 No need to consider these generally speaking. The focus is on the RAG system's accuracy and your approach.
 
+#### 6. Do I have to pay out of pocket for LLM API usage?
+No! Please request a Gemini API Key from me, I suggest using Flash 2.5/2.0.
+
+Find my contact info in the section below
+
 ### General Information
 
 This is an "open book" assessment with no hidden tests or trick questions. The goal is to see how you work, how you think, and to provide normal work conditions.
 
 The assessment does not prohibit the use of Google, StackOverflow, AI, or other common tools that are used on the job.
+
+Contact me for questions: https://contact.josephch.in
 
 ---
 
