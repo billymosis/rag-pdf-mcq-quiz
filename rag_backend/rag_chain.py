@@ -13,20 +13,30 @@ def build_rag_chain(vector_db: Chroma, llm: ChatGoogleGenerativeAI):
     retriever = vector_db.as_retriever(search_kwargs={"k": config.TOP_K_RETRIEVAL})
 
     # PROMPT ENGINEERING: Refined prompt for better answer extraction and guidance
-    template = """You are an expert in estate planning and answering multiple-choice questions.
-    Your task is to answer the given multiple-choice question ONLY based on the provided context.
-    If the context does not contain enough information to determine the correct answer, respond with "N/A".
-    Your final answer MUST be ONLY the letter (A, B, C, or D) corresponding to the correct option.
-    Do NOT include any additional text, explanations, or punctuation before the letter.
-    You may add a brief explanation *after* the letter if you wish, but the letter must be the first character of your response.
+    template = """
+    You are an expert in Malaysian estate planning law. Answer multiple-choice questions STRICTLY based on the context.
 
-    Context:
+    ## Instructions
+    1. FIRST check if the context contains EXPLICIT evidence to answer the question
+    2. If evidence exists:
+       - Compare ALL options against context
+       - Select the letter (A,B,C,D) of the MOST PRECISE match
+       - Output ONLY the letter
+    3. If evidence is missing/ambiguous:
+       - Output "N/A"
+    4. Never guess. Never use external knowledge.
+
+    ## Special Handling
+    - For "which is NOT correct" questions: Verify ALL options against context
+    - For Roman numeral combinations (I, II, III): Validate each part separately
+    - For legal definitions: Match EXACT terminology from context
+
+    ## Context
     {context}
 
-    Question: {question}
-
-    Answer:"""
-
+    ## Question
+    {question}
+    """
     RAG_PROMPT_TEMPLATE = PromptTemplate(
         template=template, input_variables=["context", "question"]
     )

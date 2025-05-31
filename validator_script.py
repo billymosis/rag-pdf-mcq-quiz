@@ -1,4 +1,5 @@
 import os
+import time
 from dotenv import load_dotenv
 
 # Import functions and configurations from your RAG backend modules
@@ -20,6 +21,9 @@ def run_validation():
     Calculates and prints accuracy, and details incorrect answers.
     """
     print("\n--- Starting RAG System Validation ---")
+
+    # Record the start time
+    start_time = time.time()
 
     # Step 1: Ensure API key is available
     gemini_api_key = os.getenv("GEMINI_API_KEY")
@@ -92,6 +96,9 @@ def run_validation():
             print(
                 f"  Result: INCORRECT (Expected: {expected_answer}, Predicted: {predicted_answer})"
             )
+    # Record the end time
+    end_time = time.time()
+    total_duration = end_time - start_time
 
     accuracy = (
         (correct_predictions / total_questions) * 100 if total_questions > 0 else 0
@@ -103,6 +110,7 @@ def run_validation():
     print(f"Correctly Answered: {correct_predictions}")
     print(f"Incorrectly Answered: {total_questions - correct_predictions}")
     print(f"Accuracy: {accuracy:.2f}%")
+    print(f"Total Duration: {total_duration:.2f} seconds")  # Print the duration
     print("=" * 40)
 
     if incorrect_answers_details:
