@@ -9,5 +9,5 @@ CHUNK_OVERLAP = 200
 
 # --- RAG Parameters ---
 TOP_K_RETRIEVAL = 5  # Number of most relevant documents to retrieve
-LLM_MODEL_NAME = "gemini-2.5-pro-preview-05-06"
+LLM_MODEL_NAME = "gemini-1.5-flash"
 LLM_TEMPERATURE = 0.0  # Set to 0.0 for deterministic answers
