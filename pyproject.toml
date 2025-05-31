@@ -10,6 +10,8 @@ dependencies = [
     "langchain>=0.3.25",
     "langchain-community>=0.3.24",
     "langchain-google-genai>=2.1.5",
+    "nltk>=3.9.1",
     "pypdf>=5.5.0",
     "python-dotenv>=1.1.0",
+    "unstructured[md]>=0.17.2",
 ]

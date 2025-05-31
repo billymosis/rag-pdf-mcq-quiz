@@ -1,8 +1,8 @@
 import os
 import json
-from langchain_community.document_loaders import PyPDFDirectoryLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from pathlib import Path
 from rag_backend import config
+from langchain_community.document_loaders import UnstructuredMarkdownLoader
 
 
 def load_and_chunk_pdfs(
@@ -15,19 +15,22 @@ def load_and_chunk_pdfs(
     and splits the text into smaller, manageable chunks.
     """
     print(f"Loading PDFs from: {pdf_dir}")
-    loader = PyPDFDirectoryLoader(pdf_dir)
-    documents = loader.load()
+
+    documents = []
+    for root, _, files in os.walk(pdf_dir):
+        for file in files:
+            if file.lower().endswith(".md"):
+                _path = Path(os.path.join(root, file))
+                loader = UnstructuredMarkdownLoader(
+                    _path, chunks=chunk_size, chunk_overlap=chunk_overlap
+                )
+                document = loader.load()
+                documents.extend(document)
+
     print(f"Loaded {len(documents)} initial pages/documents.")
 
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap,
-        length_function=len,
-        add_start_index=True,
-    )
-    chunks = text_splitter.split_documents(documents)
-    print(f"Split into {len(chunks)} chunks.")
-    return chunks
+    print(f"Split into {len(documents)} chunks.")
+    return documents
 
 
 def load_quiz_questions(quiz_path: str = config.QUIZ_QUESTIONS_PATH):

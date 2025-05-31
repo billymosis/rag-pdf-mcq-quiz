@@ -1,4 +1,6 @@
 import os
+import time
+from concurrent.futures import ThreadPoolExecutor
 from dotenv import load_dotenv
 
 # Import functions and configurations from your RAG backend modules
@@ -14,12 +16,47 @@ from rag_backend.rag_chain import build_rag_chain, answer_quiz_question
 load_dotenv()
 
 
+def process_question(q_data, rag_chain, question_num, total_questions):
+    """
+    Thread-safe function to process a single question
+    Returns tuple: (result_dict, is_correct)
+    """
+    question_text = q_data.get("question")
+    expected_answer = q_data.get("answer")
+
+    if not question_text or not expected_answer:
+        print(f"Skipping malformed question at index {question_num-1}: {q_data}")
+        return None, False
+
+    print(
+        f"\nValidating Question {question_num}/{total_questions} (Chapter: {q_data.get('chapter', 'N/A')})..."
+    )
+
+    predicted_answer = answer_quiz_question(question_text, rag_chain)
+    is_correct = predicted_answer == expected_answer
+
+    result = {
+        "question_num": question_num,
+        "chapter": q_data.get("chapter", "N/A"),
+        "question": question_text,
+        "expected": expected_answer,
+        "predicted": predicted_answer,
+    }
+
+    print(
+        f"  Result: {'CORRECT' if is_correct else 'INCORRECT'} (Expected: {expected_answer}, Predicted: {predicted_answer})"
+    )
+
+    return result, is_correct
+
+
 def run_validation():
     """
     Runs the full validation process for the RAG system against all quiz questions.
     Calculates and prints accuracy, and details incorrect answers.
     """
     print("\n--- Starting RAG System Validation ---")
+    start_time = time.time()
 
     # Step 1: Ensure API key is available
     gemini_api_key = os.getenv("GEMINI_API_KEY")
@@ -30,13 +67,8 @@ def run_validation():
         exit(1)
 
     # Step 2: Load the Vector Database
-    # We assume the ChromaDB has already been built by running main.py at least once.
-    # If it doesn't exist, this function will raise an error, or you could add logic
-    # to build it here if preferred (though it's better to keep validation separate).
     try:
-        vector_db = create_or_load_vector_store(
-            chunks=[]
-        )  # Pass None for chunks as we're loading
+        vector_db = create_or_load_vector_store(chunks=[])
     except ValueError as e:
         print(f"Error loading vector store: {e}")
         print(
@@ -52,47 +84,41 @@ def run_validation():
 
     # Step 5: Load ALL Quiz Questions
     quiz_questions = load_quiz_questions(config.QUIZ_QUESTIONS_PATH)
-
-    correct_predictions = 0
     total_questions = len(quiz_questions)
-    incorrect_answers_details = []
-
     print(f"\n--- Processing {total_questions} quiz questions ---")
 
-    for i, q_data in enumerate(quiz_questions):
-        # Use .get() for robustness in case 'expected_answer' or 'answer' is missing
-        question_text = q_data.get("question")
-        expected_answer = q_data.get("answer")
+    # Threading implementation
+    correct_predictions = 0
+    incorrect_answers_details = []
 
-        if not question_text or not expected_answer:
-            print(f"Skipping malformed question at index {i}: {q_data}")
-            continue
+    # Determine optimal thread count (adjust based on your system)
+    num_threads = min(8, os.cpu_count() or 4)  # Use up to 8 threads
 
-        print(
-            f"\nValidating Question {i+1}/{total_questions} (Chapter: {q_data.get('chapter', 'N/A')})..."
-        )
-
-        predicted_answer = answer_quiz_question(question_text, rag_chain)
-
-        if predicted_answer == expected_answer:
-            correct_predictions += 1
-            print(
-                f"  Result: CORRECT (Expected: {expected_answer}, Predicted: {predicted_answer})"
-            )
-        else:
-            incorrect_answers_details.append(
-                {
-                    "question_num": i + 1,
-                    "chapter": q_data.get("chapter", "N/A"),
-                    "question": question_text,
-                    "expected": expected_answer,
-                    "predicted": predicted_answer,
-                }
-            )
-            print(
-                f"  Result: INCORRECT (Expected: {expected_answer}, Predicted: {predicted_answer})"
+    with ThreadPoolExecutor(max_workers=num_threads) as executor:
+        futures = []
+        for i, q_data in enumerate(quiz_questions):
+            futures.append(
+                executor.submit(
+                    process_question,
+                    q_data=q_data,
+                    rag_chain=rag_chain,
+                    question_num=i + 1,
+                    total_questions=total_questions,
+                )
             )
 
+        # Collect results as they complete
+        for future in futures:
+            result, is_correct = future.result()
+            if result:  # Skip None results from malformed questions
+                if is_correct:
+                    correct_predictions += 1
+                else:
+                    incorrect_answers_details.append(result)
+
+    # Calculate statistics
+    end_time = time.time()
+    total_duration = end_time - start_time
     accuracy = (
         (correct_predictions / total_questions) * 100 if total_questions > 0 else 0
     )
@@ -103,6 +129,9 @@ def run_validation():
     print(f"Correctly Answered: {correct_predictions}")
     print(f"Incorrectly Answered: {total_questions - correct_predictions}")
     print(f"Accuracy: {accuracy:.2f}%")
+    print(
+        f"Total Duration: {total_duration:.2f} seconds (Threading: {num_threads} threads)"
+    )
     print("=" * 40)
 
     if incorrect_answers_details:
