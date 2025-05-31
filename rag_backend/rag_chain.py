@@ -1,16 +1,14 @@
 import re
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
-from langchain_community.vectorstores import Chroma
+from langchain.retrievers import ContextualCompressionRetriever
 from langchain_google_genai import ChatGoogleGenerativeAI
-from rag_backend import config
 
 
-def build_rag_chain(vector_db: Chroma, llm: ChatGoogleGenerativeAI):
-    """
-    Builds and returns a LangChain RetrievalQA chain.
-    """
-    retriever = vector_db.as_retriever(search_kwargs={"k": config.TOP_K_RETRIEVAL})
+def build_rag_chain(
+    llm: ChatGoogleGenerativeAI,
+    retriever: ContextualCompressionRetriever,
+):
 
     # PROMPT ENGINEERING: Refined prompt for better answer extraction and guidance
     template = """

@@ -13,12 +13,13 @@ from rag_backend.vector_store_manager import (
     initialize_gemini_llm,
 )
 from rag_backend.rag_chain import build_rag_chain, answer_quiz_question
+from rag_backend.retriever import get_retriever
 
 # Load environment variables from .env file
 load_dotenv()
 
 
-def run_rag_test():
+def run_rag():
     """
     Orchestrates the RAG process for testing purposes.
     """
@@ -42,8 +43,10 @@ def run_rag_test():
     # Step 3: Initialize the Gemini LLM
     llm = initialize_gemini_llm()
 
+    retriever = get_retriever(vector_db)
+
     # Step 4: Build the RAG Chain
-    rag_chain = build_rag_chain(vector_db, llm)
+    rag_chain = build_rag_chain(llm, retriever)
 
     # Step 5: Load Quiz Questions for testing
     # You can choose to load all questions or just a specific chapter
@@ -88,4 +91,4 @@ def run_rag_test():
 
 
 if __name__ == "__main__":
-    run_rag_test()
+    run_rag()

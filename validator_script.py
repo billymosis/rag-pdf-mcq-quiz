@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 # Import functions and configurations from your RAG backend modules
 from rag_backend import config
 from rag_backend.data_processing import load_quiz_questions
+from rag_backend.retriever import get_retriever
 from rag_backend.vector_store_manager import (
     create_or_load_vector_store,
     initialize_gemini_llm,
@@ -79,8 +80,10 @@ def run_validation():
     # Step 3: Initialize the Gemini LLM
     llm = initialize_gemini_llm()
 
+    retriever = get_retriever(vector_db)
+
     # Step 4: Build the RAG Chain
-    rag_chain = build_rag_chain(vector_db, llm)
+    rag_chain = build_rag_chain(llm, retriever)
 
     # Step 5: Load ALL Quiz Questions
     quiz_questions = load_quiz_questions(config.QUIZ_QUESTIONS_PATH)

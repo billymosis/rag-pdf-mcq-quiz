@@ -29,10 +29,9 @@ def create_or_load_vector_store(
     gemini_api_key = get_gemini_api_key()
 
     embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/embedding-001",
-        google_api_key=SecretStr(
-            gemini_api_key
-        ),  # No need for SecretStr here if it's handled by LangChain internal
+        model=config.LLM_MODEL_EMBEDDING,
+        google_api_key=SecretStr(gemini_api_key),
+        task_type="retrieval_document",
     )
 
     # Check if the database already exists and has documents
@@ -51,7 +50,10 @@ def create_or_load_vector_store(
             raise ValueError("Chunks must be provided to create a new vector store.")
         print(f"Creating new ChromaDB at {persist_directory}")
         vectorstore = Chroma.from_documents(
-            documents=chunks, embedding=embeddings, persist_directory=persist_directory
+            documents=chunks,
+            embedding=embeddings,
+            persist_directory=persist_directory,
+            collection_metadata={"hnsw:space": "cosine"},
         )
         print(f"ChromaDB created with {vectorstore._collection.count()} entries.")
 
