@@ -1,0 +1,15 @@
+[project]
+name = "rag-mcq-tech-test"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "chromadb>=1.0.12",
+    "google-genai>=1.18.0",
+    "langchain>=0.3.25",
+    "langchain-community>=0.3.24",
+    "langchain-google-genai>=2.1.5",
+    "pypdf>=5.5.0",
+    "python-dotenv>=1.1.0",
+]
