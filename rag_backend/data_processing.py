@@ -1,11 +1,23 @@
 import os
 import json
 import re
+from dotenv import load_dotenv
 from pathlib import Path
+
+from llama_cloud_services.parse import ResultType
 from rag_backend import config
 from langchain.text_splitter import (
     MarkdownHeaderTextSplitter,
     RecursiveCharacterTextSplitter,
+)
+
+from llama_cloud_services import LlamaParse
+
+load_dotenv()
+parser = LlamaParse(
+    result_type=ResultType.MD,
+    api_key=os.getenv("LLAMA_CLOUD_PARSER_KEY", ""),
+    verbose=True,
 )
 
 
@@ -16,13 +28,6 @@ def clean_markdown_document(markdown_content):
     """
     cleaned_content = markdown_content
 
-    # 1. Remove the repeating top-level headers.
-    # We only want the first instance of these headers, so we target subsequent occurrences.
-    # This regex looks for these headers followed by a newline, but not at the very beginning of the string.
-    # redundant_header_pattern = re.compile(
-    #     r"(?:\n^# RFP Programme - Module 5\s*\n^# Chapter 1 : The Concepts and Fundamentals of Estate Planning\s*\n)",
-    #     re.MULTILINE,
-    # )
     redundant_header_pattern = re.compile(
         r"^# Chapter \d+.*: .+?\s*\n",  # Removes standalone chapter lines
         re.MULTILINE,
@@ -33,19 +38,7 @@ def clean_markdown_document(markdown_content):
         re.MULTILINE,
     )
     cleaned_content = redundant_header_pattern.sub("\n", cleaned_content)
-    # cleaned_content = redundant_header_pattern.sub(
-    #     "\n", cleaned_content, count=1
-    # )  # Remove all but the first instance
 
-    # Handle the very first instance of the repeated headers if it exists in a way that
-    # doesn't break the initial document structure (e.g., if there's text before it)
-    # For your document, it appears clean at the start, so the above should suffice,
-    # but a more robust approach might be to remove them and then re-add the first one if needed.
-    # For now, let's assume the first instance is desired.
-
-    # 2. Remove page numbers and "Malaysian Financial Planning Council (MFPC)" footer
-    # Pattern: "1-X Malaysian Financial Planning Council (MFPC)" or "Malaysian Financial Planning Council (MFPC) 1-X"
-    # and the trailing "---" if it's there
     footer_pattern_1 = re.compile(
         r"^\d+-\d+\s+Malaysian Financial Planning Council \(MFPC\)\s*\n?---?\s*$",
         re.MULTILINE,
@@ -67,19 +60,55 @@ def clean_markdown_document(markdown_content):
     cleaned_content = footer_pattern_3.sub("", cleaned_content)
     cleaned_content = footer_pattern_4.sub("", cleaned_content)
 
-    # 3. Remove standalone horizontal rules (---) that might remain after footer removal,
+    # Remove standalone horizontal rules (---) that might remain after footer removal,
     # or any other instances that are not part of a header.
     # Be careful not to remove horizontal rules used as part of tables if any exist.
     # Here, we assume "---" is only used for page breaks.
     horizontal_rule_pattern = re.compile(r"^\s*---\s*$", re.MULTILINE)
     cleaned_content = horizontal_rule_pattern.sub("", cleaned_content)
 
-    # 4. Remove any excessive blank lines that might result from removals
-    cleaned_content = re.sub(
-        r"\n{3,}", "\n\n", cleaned_content
-    )  # Replace 3 or more newlines with 2
+    # Remove any excessive blank lines that might result from removals
+    cleaned_content = re.sub(r"\n{3,}", "\n\n", cleaned_content)
 
     return cleaned_content
+
+
+def write_md_and_json(pdf_path: str, md_path: str, json_path: str):
+    # Call the parser to get results for the entire PDF
+    results = parser.parse(pdf_path)
+
+    # Initialize an empty list to hold Markdown content from all pages
+    all_pages_md_content = []
+
+    pages_json_data = []  # List to hold dictionary representations of each page
+
+    for idx, page in enumerate(results.pages):
+        # Assuming page is a Pydantic model or similar object
+        # .model_dump() returns a Python dictionary
+        pages_json_data.append(page.model_dump())
+
+        # You already have this for markdown, keep it
+        all_pages_md_content.append(page.md)
+        print(f"  - Processed page {idx + 1}")
+
+    # Create the final Python dictionary structure for JSON
+    output_json_dict = {"pages": pages_json_data}
+
+    # Join all the collected Markdown content with a separator (e.g., a newline or page break)
+    # You might want to add a clear page separator like '--- Page X ---'
+    # For simplicity, we'll just join with two newlines here.
+    combined_md = "\n---\n".join(all_pages_md_content)
+
+    # Write the combined Markdown content to the file once
+    with open(md_path, "w", encoding="utf-8") as file:
+        file.write(combined_md)
+    print(f"Successfully wrote combined Markdown to {md_path}")
+    # --- WRITE JSON USING json.dump() ---
+    with open(json_path, "w", encoding="utf-8") as file:
+        # json.dump() writes the Python object directly to the file
+        # indent=4 makes the JSON human-readable with 4-space indentation
+        json.dump(output_json_dict, file, indent=4)
+    print(f"Successfully wrote JSON to {json_path}")
 
 
 def load_and_chunk_pdfs(
@@ -104,14 +133,33 @@ def load_and_chunk_pdfs(
     documents = []
     for root, _, files in os.walk(pdf_dir):
         for file in files:
-            if file.lower().endswith(".md"):
-                _path = Path(os.path.join(root, file))
-                with open(_path, "r") as file:
-                    content = file.read()
-                    cleaned_markdown = clean_markdown_document(content)
-                    md_header_splits = markdown_splitter.split_text(cleaned_markdown)
-                    documents.extend(md_header_splits)
-                    pass
+            base_name = os.path.splitext(os.path.basename(file))[0]
+            documents.append(base_name)
+            print(base_name)
+
+    document_chunks = []
+
+    for base_name in documents:
+        pdf_path = os.path.join(pdf_dir, f"{base_name}.pdf")
+        json_path = os.path.join(pdf_dir, f"{base_name}.json")
+        md_path = os.path.join(pdf_dir, f"{base_name}.md")
+        if not os.path.exists(md_path):
+            try:
+                write_md_and_json(
+                    pdf_path,
+                    md_path,
+                    json_path,
+                )
+
+            except Exception as e:
+                print(f"Error parsing {pdf_path}: {e}")
+        else:
+            with open(md_path, "r") as file:
+                content = file.read()
+                cleaned_markdown = clean_markdown_document(content)
+                md_header_splits = markdown_splitter.split_text(cleaned_markdown)
+                document_chunks.extend(md_header_splits)
+            print(f"Markdown file already exists for {base_name}, skipping parsing.")
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
@@ -122,10 +170,10 @@ def load_and_chunk_pdfs(
             "\n",
             " ",
             "",
-        ],  # Try to split by paragraphs, then lines, then words
+        ],
     )
     final_chunks = []
-    for doc in documents:
+    for doc in document_chunks:
         chunks_from_header = text_splitter.create_documents(
             texts=[doc.page_content],
             metadatas=[doc.metadata] * len(text_splitter.split_text(doc.page_content)),
