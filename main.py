@@ -50,17 +50,16 @@ def run_rag_test():
     # For initial testing, let's load Chapter 1 questions as before.
     # You can change 'chapter_1' to another chapter key or use load_quiz_questions() for all.
     try:
-        quiz_questions_for_test = load_chapter_quiz_questions(chapter_key="chapter_1")
+        chapter = "chapter_8"
+        quiz_questions_for_test = load_chapter_quiz_questions(chapter_key=chapter)
     except KeyError:
-        print("Chapter 'chapter_1' not found. Loading all questions for test.")
-        quiz_questions_for_test = load_quiz_questions()
-        # Take first 10 questions if loading all, to match original test scope
-        quiz_questions_for_test = quiz_questions_for_test[:10]
+        print(f"Chapter not found.")
+        return
 
     print("\n--- Testing RAG system with sample questions ---")
 
     predictions = []
-    for q_data in quiz_questions_for_test[0:1]:
+    for q_data in quiz_questions_for_test[0:10]:
         question_text = q_data["question"]
         # Ensure 'expected_answer' key is used, as per the quiz data structure
         expected_answer = q_data["answer"]  # Use 'answer' as fallback

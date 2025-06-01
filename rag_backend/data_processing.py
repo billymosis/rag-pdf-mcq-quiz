@@ -110,6 +110,32 @@ def write_md_and_json(pdf_path: str, md_path: str, json_path: str):
     print(f"Successfully wrote JSON to {json_path}")
 
 
+def get_chapter_objectives(text):
+    # Find the "Chapter Objectives" section
+    match = re.search(
+        r"# Chapter Objectives\s*On completion of this chapter you should have a basic knowledge on:\s*",
+        text,
+    )
+    if not match:
+        return []
+
+    start_index = match.end()
+
+    # Find the end of the objectives list (before the next heading or "---")
+    # This regex looks for a new section starting with '#' or the '---' separator
+    end_match = re.search(r"\n(#.+|\n---)", text[start_index:])
+    if end_match:
+        end_index = start_index + end_match.start()
+    else:
+        end_index = len(text)  # If no further heading, take till end
+
+    objectives_section = text[start_index:end_index].strip()
+
+    # Extract bullet points
+    objectives = re.findall(r"^- (.+)", objectives_section, re.MULTILINE)
+    return objectives
+
+
 def load_and_chunk_pdfs(
     pdf_dir: str = config.PDF_DIRECTORY,
     chunk_size: int = config.CHUNK_SIZE,
@@ -153,8 +179,12 @@ def load_and_chunk_pdfs(
         else:
             with open(md_path, "r") as file:
                 content = file.read()
+                objectives = get_chapter_objectives(content)
                 cleaned_markdown = clean_markdown_document(content)
                 md_header_splits = markdown_splitter.split_text(cleaned_markdown)
+                for b in md_header_splits:
+                    b.metadata["chapter"] = base_name
+                    b.metadata["objectives"] = ", ".join(objectives)
                 document_chunks.extend(md_header_splits)
             print(f"Markdown file already exists for {base_name}, skipping parsing.")
 
