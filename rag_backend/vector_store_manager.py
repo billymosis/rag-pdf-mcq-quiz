@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from pydantic import SecretStr
 from rag_backend import config
 
@@ -29,10 +29,9 @@ def create_or_load_vector_store(
     gemini_api_key = get_gemini_api_key()
 
     embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/embedding-001",
-        google_api_key=SecretStr(
-            gemini_api_key
-        ),  # No need for SecretStr here if it's handled by LangChain internal
+        model=config.LLM_MODEL_EMBEDDING,
+        google_api_key=SecretStr(gemini_api_key),
+        task_type="retrieval_document",
     )
 
     # Check if the database already exists and has documents
