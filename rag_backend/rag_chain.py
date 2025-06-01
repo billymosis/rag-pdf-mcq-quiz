@@ -16,14 +16,6 @@ class Search(BaseModel):
     """Search query."""
 
     query: str = Field(..., description="Broad term search query for this question")
-    chapter: str = Field(
-        ...,
-        description="Which correlated chapter title according to the question based on this [1. Chapter 1  The Concepts and Fundamentals of Estate Planning, 2. Chapter 2  Testacy and Intestacy, 3. Chapter 3  Estate of Muslims, 4. Chapter 4  Trusts, 5. Chapter 5  Powers of Attorney, 6. Chapter 6  Personal Representatives Duties and Powers, 7. Chapter 7  Life Insurance and Estate Planning, 8. Chapter 8  Estate Planning for Business Owners, Estate Planning-13-15] answer based on that array, if you don't know answer N/A",
-    )
-    objectives: str = Field(
-        ...,
-        description="Objectives of the question",
-    )
 
 
 class State(TypedDict):
@@ -42,7 +34,7 @@ def build_rag_chain(vector_db: Chroma, llm: ChatGoogleGenerativeAI):
         [
             (
                 "system",
-                "You are an expert in estate planning in Malaysia, expert in muslim rules and expert in real estate law including the insurance part, and also at answering multiple-choice questions. Your task is to answer the given multiple-choice question ONLY based on the provided context. If the context does not contain enough information to determine the correct answer, respond with 'N/A'. Your final answer MUST be ONLY the letter (A, B, C, or D) corresponding to the correct option. Do NOT include any additional text, explanations, or punctuation before the letter. You may add a brief explanation *after* the letter if you wish, but the letter must be the first character of your response.",
+                "You are an expert in estate planning in Malaysia, expert in muslim rules and expert in real estate law including the life insurance rules, and also at answering multiple-choice questions. Your task is to answer the given multiple-choice question ONLY based on the provided context. If the context does not contain enough information to determine the correct answer, respond with 'N/A'. Your final answer MUST be ONLY the letter (A, B, C, or D) corresponding to the correct option. Do NOT include any additional text, explanations, or punctuation before the letter. You may add a brief explanation *after* the letter if you wish, but the letter must be the first character of your response.",
             ),
             ("human", "Context:\n{context}\n\nQuestion: {question}\n\nAnswer:"),
         ]
@@ -78,10 +70,7 @@ def build_rag_chain(vector_db: Chroma, llm: ChatGoogleGenerativeAI):
                 # },
             },
         )
-        docs = retrieved_docs.invoke(
-            f"{query.query}, possible chapter {query.chapter}, question objectives: {query.objectives}"
-        )
-        print("chapter: ", query.chapter)
+        docs = retrieved_docs.invoke(query.query)
         print(f"retrieved relevant: {len(docs)} docs")
         return {"context": docs}
 
