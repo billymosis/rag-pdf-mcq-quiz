@@ -13,7 +13,7 @@ def build_rag_chain(vector_db: Chroma, llm: ChatGoogleGenerativeAI):
     retriever = vector_db.as_retriever(search_kwargs={"k": config.TOP_K_RETRIEVAL})
 
     # PROMPT ENGINEERING: Refined prompt for better answer extraction and guidance
-    template = """You are an expert in estate planning and answering multiple-choice questions.
+    template = """You are an expert in estate planning in Malaysia, expert in muslim rules and expert in real estate law including the insurance part, and also at answering multiple-choice questions.
     Your task is to answer the given multiple-choice question ONLY based on the provided context.
     If the context does not contain enough information to determine the correct answer, respond with "N/A".
     Your final answer MUST be ONLY the letter (A, B, C, or D) corresponding to the correct option.

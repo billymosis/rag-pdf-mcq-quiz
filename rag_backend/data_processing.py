@@ -1,14 +1,13 @@
 import os
 import json
 import re
+import glob
 from dotenv import load_dotenv
-from pathlib import Path
 
 from llama_cloud_services.parse import ResultType
 from rag_backend import config
 from langchain.text_splitter import (
     MarkdownHeaderTextSplitter,
-    RecursiveCharacterTextSplitter,
 )
 
 from llama_cloud_services import LlamaParse
@@ -130,12 +129,10 @@ def load_and_chunk_pdfs(
         headers_to_split_on=headers_to_split_on
     )
 
-    documents = []
-    for root, _, files in os.walk(pdf_dir):
-        for file in files:
-            base_name = os.path.splitext(os.path.basename(file))[0]
-            documents.append(base_name)
-            print(base_name)
+    documents = set()
+    for file_path in glob.glob(os.path.join(pdf_dir, "*.pdf")):
+        base_name = os.path.splitext(os.path.basename(file_path))[0]
+        documents.add(base_name)
 
     document_chunks = []
 
@@ -161,28 +158,8 @@ def load_and_chunk_pdfs(
                 document_chunks.extend(md_header_splits)
             print(f"Markdown file already exists for {base_name}, skipping parsing.")
 
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap,
-        length_function=len,
-        separators=[
-            "\n\n",
-            "\n",
-            " ",
-            "",
-        ],
-    )
-    final_chunks = []
-    for doc in document_chunks:
-        chunks_from_header = text_splitter.create_documents(
-            texts=[doc.page_content],
-            metadatas=[doc.metadata] * len(text_splitter.split_text(doc.page_content)),
-        )
-        final_chunks.extend(chunks_from_header)
-        pass
-
-    print(f"Split into {len(final_chunks)} chunks.")
-    return documents
+    print(f"Split into {len(document_chunks)} chunks.")
+    return document_chunks
 
 
 def load_quiz_questions(quiz_path: str = config.QUIZ_QUESTIONS_PATH):
