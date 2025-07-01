@@ -153,7 +153,15 @@ Returns accuracy, prediction, and correctness for each question.
 
 ## 📎 Context
 
-This system was built for a **real-world technical assessment** by [DocuAsk](https://docuask.com), based on content from the **Malaysian Financial Planning Council (MFPC)**.
+This system was built for a **real-world technical assessment** by [DocuAsk.ai](https://github.com/chin-jlyc/rag-mcq-tech-test), based on content from the **Malaysian Financial Planning Council (MFPC)**.
+
+---
+
+💬 Contact & Credits
+
+Original task and assessment design by Joseph Chin – DocuAsk.
+
+Implementation, accuracy testing, and improvements by me.
 
 ---
 
