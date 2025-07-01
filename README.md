@@ -1,123 +1,163 @@
-# DocuAsk - Stage 2 Interview Task - RAG System
+# 📚 DocuAsk RAG System – MCQ Answering Engine
 
-## Introduction
-
-Welcome to Stage 2 of the interview process with DocuAsk!
-
-This repository contains the materials and instructions for a take-home technical assessment. The goal is to evaluate your approach to problem-solving in a generative AI context, 
-specifically using **Retrieval Augmented Generation (RAG)**. We're interested in how you think about retrieving information and solving problems in this domain, rather than UI 
-development.
-
-This task is based on a real-world requirement from the MFPC (Malaysian Financial Planning Council) involving their educational materials.
-
-## The Task
-
-Your objective is to **build a RAG system that can accurately answer multiple-choice quiz questions** based on the provided financial planning course materials.
-
-The system should:
-1.  Consume the content from the provided PDF course materials (details below).
-2.  When given a multiple-choice quiz question from the corresponding chapter quiz:
-    *   Retrieve relevant information from the PDF content.
-    *   Use this retrieved information (and an LLM) to determine the correct multiple-choice answer (e.g., A, B, C, or D).
-
-## Provided Materials
-
-Inside this repository, you will find:
-
-1.  **`data/5_estate_planning/Lessons`**: A folder containing 8 PDF files, representing Chapters 1 through 8 of the "Estate Planning" module. This is the source material your RAG system should 
-use.
-2.  **`data/processed/5_estate_planning_questions.json`**: A JSON file containing all the multiple-choice questions for the 8 chapters (10 questions per chapter). Each entry includes:
-    *   `chapter_key`: Identifier for the chapter (e.g., "chapter1").
-    *   `question`: The full text of the multiple-choice question, including the options (A, B, C, D).
-    *   `expected_answer`: The correct option (e.g., "A", "B", "C", or "D").
-
-*(Optional: You may want to include the actual quiz PDFs in a `data/5_estate_planning` folder as well for context, even if the primary evaluation uses the JSON).*
-
-## Goals & Success Criteria
-
-*   **Primary Goal:** Achieve the highest possible accuracy in answering the 80 quiz questions using your RAG system.
-*   **Minimum Accuracy:** Your system must achieve at least **75%** accuracy across all questions.
-*   **Excellent Accuracy:** Your system is *awesome* if it achieves **85%** accuracy across all questions.
-*   **(Benchmark):** For reference, an internal implementation achieved 97% accuracy. Aim high!
-
-## Deliverables
-
-Please structure your submission within this repository (or a fork of it). We are looking for two main components:
-
-1.  **RAG API/System:**
-    *   The core backend logic for your RAG system.
-    *   This could be structured as an API endpoint (e.g., using Flask, FastAPI, Node.js/Express) that accepts a quiz question (from `quiz_data.json`) and returns the predicted 
-answer (A, B, C, or D).
-    *   This system should implement the logic for processing/chunking the PDFs, embedding, retrieving relevant context, and using an LLM to select the answer based on the context.
-
-2.  **Validator Script:**
-    *   A script (e.g., Python, Node.js) that automatically evaluates your RAG system's performance.
-    *   This script should:
-        *   Read the questions and expected answers from `quiz_data.json`.
-        *   Call your RAG API/System for each question.
-        *   Compare the predicted answer from your API with the `expected_answer`.
-        *   Calculate and print the overall accuracy percentage.
-        *   (Highly Recommended): Output details about incorrect answers (e.g., question, expected answer, predicted answer) to help identify patterns and areas for improvement 
-during your development.
-
-**Focus:** Please concentrate on the backend RAG pipeline, data processing, retrieval strategy, prompt engineering, and validation. **No UI/frontend development is required.**
-
-## Key Considerations & Hints
-
-*   **PDF Processing:** How will you extract text and potentially structure/chunk the information from the PDFs effectively?
-*   **Retrieval Strategy:** How will you ensure the most relevant context is retrieved for each specific quiz question? Consider embedding models and retrieval techniques.
-*   **Answer Selection:** LLMs excel at generating text, but multiple-choice requires selecting a specific option. How will you prompt the LLM or structure the process to reliably 
-choose A, B, C, or D based *only* on the retrieved context? Be wary of hallucination or the LLM using its general knowledge.
-*   **Validation Loop:** Use your validator script iteratively during development to measure improvements and guide your efforts.
-*   **Question Nuances:** Pay attention to how the questions are phrased; some might contain subtleties or require careful consideration of the retrieved text.
-
-## Technology Stack
-
-You are free to choose the programming languages, frameworks, and libraries you are most comfortable with (e.g., Python, Langchain, LlamaIndex, Node.js, etc.). You can use any LLM 
-accessible via API (like OpenAI's models, Anthropic's Claude, etc.) or run local models if you prefer.
-
-**(Feel free to request an API key from gemini if you'd like)**
-
-## Next Steps & Communication
-
-1.  Clone or fork this repository.
-2.  Review the materials and the task description.
-3.  Begin designing and implementing your solution.
-4.  **Reach out anytime:** If you have questions or need clarification, please don't hesitate to message Joseph Chin (contact details provided separately, e.g., via email, whatsapp or through the agency). Collaboration and asking questions are encouraged.
-5.  **Submission & Review:** Please aim to have your solution ready for discussion by the agreed-upon deadline (typically the assessment should take no more than a few days). Let Joseph know your availability. We will schedule a call to walk through your code, design choices, and results.
-
-## Frequently Asked Questions (FAQ)
-
-### Test Policies and Evaluation
-
-#### 1. What is the policy about using AI in this test?
-AI usage is encouraged. This is an "open book" assessment where you can use common tools that would be used on the job, including Google, StackOverflow, and AI assistants.
-
-#### 2. Will the evaluation be done solely on the 80 questions provided, or will there be additional test questions?
-The evaluation will be done solely on the questions provided. There are no hidden tests or trick questions.
-
-#### 3. Is the 75% accuracy threshold calculated across all questions equally, or are some chapters weighted differently?
-All questions are weighted equally with no weighting differences between chapters.
-
-#### 4. Are there any specific requirements for the API implementation, such as response time constraints or throughput volume target?
-The assessment is more interested in the process of improvement and your thought process rather than specific performance metrics.
-
-#### 5. Should I consider common security issues like DoS possibilities or other attacks?
-No need to consider these generally speaking. The focus is on the RAG system's accuracy and your approach.
-
-#### 6. Do I have to pay out of pocket for LLM API usage?
-No! Please request a Gemini API Key from me, I suggest using Flash 2.5/2.0.
-
-Find my contact info in the section below
-
-### General Information
-
-This is an "open book" assessment with no hidden tests or trick questions. The goal is to see how you work, how you think, and to provide normal work conditions.
-
-The assessment does not prohibit the use of Google, StackOverflow, AI, or other common tools that are used on the job.
-
-Contact me for questions: https://contact.josephch.in
+This project is a backend system that answers multiple-choice questions (MCQs) using a Retrieval-Augmented Generation (RAG) pipeline. It was built as part of a technical assessment for an AI startup and achieved **80%+ accuracy** across a real 80-question dataset.
 
 ---
 
-Good luck! We're looking forward to seeing your approach.
+## 🧠 Summary
+
+* **Goal**: Answer financial planning MCQs using only PDF materials (estate planning modules).
+* **Method**: Parse → Chunk → Embed → Retrieve → Prompt LLM → Predict answer (A/B/C/D).
+* **Result**: 80%+ accuracy on real data from the Malaysian Financial Planning Council (MFPC).
+* **API**: Built with **FastAPI**, fully testable via `/quiz/answer` and `/quiz/batch-answer` endpoints.
+
+---
+
+## 🗂️ Project Structure
+
+```
+.
+├── data/                     # Source PDFs and question sets
+│   ├── Lessons/              # Chapter PDFs and parsed .json/.md
+│   ├── Quiz/                 # Quiz question PDFs
+│   └── processed/            # Final question dataset (.json)
+├── rag_backend/              # Core backend: chunking, retrieval, RAG chain
+├── chroma_db/                # Persisted vector store
+├── validator_script.py       # Evaluates overall accuracy
+├── main.py                   # Script-based pipeline interface
+├── server.py                 # FastAPI backend server
+├── pyproject.toml            # Dependencies
+└── README.md
+```
+
+---
+
+## 📊 Model Performance Across Versions
+
+| Version | Commit    | Total Questions | Correct | Incorrect | Accuracy   | Model                          | Duration  | Threads |
+| ------- | --------- | --------------- | ------- | --------- | ---------- | ------------------------------ | --------- | ------- |
+| v0      | `bee88bd` | 80              | 55      | 25        | 68.75%     | gemini-2.5-flash-preview-05-20 | –         | 1       |
+| v1      | `7514868` | 80              | 49      | 31        | 61.25%     | gemini-2.5-pro-preview-05-06   | 4330.68 s | 1       |
+| v2      | `1991ae8` | 80              | 52      | 28        | 65.00%     | gemini-1.5-flash               | 14.96 s   | 8       |
+| v3      | `03b2a3e` | 80              | 50      | 30        | 62.50%     | gemini-1.5-flash               | 59.12 s   | 8       |
+| v4      | `1991ae8` | 80              | 25      | 55        | 31.25%     | gemini-2.5-flash-preview-05-20 | 201.17 s  | 8       |
+| v5      | `89e0b5b` | 80              | 59      | 21        | 73.75%     | gemini-2.0-flash               | 29.23 s   | 8       |
+| v6      | `2593deb` | 80              | 65      | 15        | **81.25%** | gemini-2.0-flash               | 18.41 s   | 8       |
+| v7      | `78799a9` | 80              | 64      | 16        | 80.00%     | gemini-2.0-flash               | 20.13 s   | 8       |
+| v8      | `8f59e61` | 80              | 58      | 22        | 72.50%     | gemini-2.0-flash               | 25.88 s   | 8       |
+
+📄 **Full log** with all question-level details:
+[Google Sheet – Evaluation Results](https://docs.google.com/spreadsheets/d/1WWdc07vQhKObIAzf8ZKCP0wK5rC0b-QBIDYvVjV8FzE/edit?usp=sharing)
+
+---
+
+## 🧪 Features
+
+* 🔍 **Context Retrieval**: Embeds and retrieves PDF content using `ChromaDB`.
+* 🧠 **LLM Reasoning**: Uses **Google Gemini** (via `langchain-google-genai`) to answer quiz questions.
+* 📄 **High-Fidelity PDF Parsing**: Uses Meta’s `llama-parser` for reliable content structure.
+* ⚙️ **FastAPI Server**: Easily testable endpoints for real-time prediction and batch evaluation.
+* 📊 **Auto Evaluation**: Script to validate predictions against expected answers.
+
+---
+
+## 🔧 Tech Stack
+
+| Area           | Tools / Libraries                |
+| -------------- | -------------------------------- |
+| Language       | Python 3.12                      |
+| Backend        | FastAPI                          |
+| Retrieval      | LangChain + ChromaDB             |
+| LLM            | Google Gemini (via API)          |
+| PDF Parsing    | llama-parser, pdftext, pypdfium2 |
+| OCR (fallback) | rapidocr-onnxruntime             |
+| Evaluation     | scikit-learn                     |
+| Environment    | dotenv, Pydantic                 |
+
+---
+
+## 🔌 FastAPI Endpoints
+
+### ✅ Root
+
+```http
+GET /
+```
+
+Returns welcome message.
+
+---
+
+### 🔄 Build or Rebuild Vector DB
+
+```http
+POST /rag/build
+```
+
+```json
+{
+  "pdf_directory": "data/5_estate_planning/Lessons",
+  "rebuild_db": true
+}
+```
+
+---
+
+### ❓ Answer a Single Quiz Question
+
+```http
+POST /quiz/answer
+```
+
+```json
+{
+  "question": "Which of the following is not true about estate planning? A. ..., B. ..., C. ..., D. ..."
+}
+```
+
+Returns predicted option (`A`, `B`, `C`, or `D`).
+
+---
+
+### 📦 Batch Answer with Evaluation
+
+```bash
+curl -X POST "http://localhost:8000/quiz/batch-answer" \
+-H "Content-Type: application/json" \
+-d '{
+  "questions": [
+    {
+      "question": "...",
+      "answer": "B"
+    },
+    {
+      "question": "...",
+      "answer": "D"
+    }
+  ]
+}'
+```
+
+Returns accuracy, prediction, and correctness for each question.
+
+---
+
+## 🧠 Design Notes
+
+* ✅ **RAG Pipeline**: Combines LangChain retriever with custom prompt for Gemini.
+* ✅ **Chunking Strategy**: Optimized with `llama-parser` to preserve layout structure.
+* ✅ **Validation**: Tracks accuracy and highlights failed questions for debugging.
+* ✅ **Stateless Server**: API initializes vector DB and LLM on startup for quick querying.
+
+---
+
+## 📎 Context
+
+This system was built for a **real-world technical assessment** by [DocuAsk](https://docuask.com), based on content from the **Malaysian Financial Planning Council (MFPC)**.
+
+---
+
+## 🙋‍♂️ Author
+
+**Billy Mosis Priambodo**
+🔗 [billymosis.com](https://billymosis.com) | [GitHub](https://github.com/billymosis) | [LinkedIn](https://linkedin.com/in/billymosis)
